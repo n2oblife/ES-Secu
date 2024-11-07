@@ -2,11 +2,11 @@
 # Change this file to match your requirements
 
 # Name of your project
-LD_NAME = dimming
+LD_NAME = Ass1PartB
 
 # Add lists of space separated source files
 # Own sources, e.g. main.c
-SRCS = dimming.c
+SRCS = PartB.c
 # Library sources, e.g. xmc_gpio.c
 LIBSRCS = 
 # Precompiled libraries, e.g. -lm for math functions
@@ -22,5 +22,10 @@ SCFLAGS  = -std=gnu99
 # debugging is more difficult
 SCFLAGS += -O0
 # If you like, you can enable even more warnings, e.g. -Wextra, but for grading -Wall will be used
-SCFLAGS +=
+SCFLAGS += -Wall
 
+
+# Define variable to tell compiler that my own include path is available
+SCFLAGS += -DINCLUDE_PATH_AVAILABLE
+# Include paths for your own headers, e.g. -I./inc
+SCFLAGS += $(foreach dir, $(shell find ../../../include -type d), -I$(dir))
