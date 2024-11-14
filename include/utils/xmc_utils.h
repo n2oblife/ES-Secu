@@ -1,8 +1,14 @@
 #pragma once 
 
+#include <xmc_common.h>
+
 //*****************************************************************************
 // Init and basic functions
 //*****************************************************************************
+
+// clk handling
+#define TIMER_RESOLUTION 100 // 100 ms resolution (10 Hz)
+volatile size_t ticks = 0;
 
 /*
     Initialize the CCU4 of XMC4500 uC based on Ref manual.
@@ -13,6 +19,11 @@ void initCCU4(void);
     Connect the LED1 to the CCU4 slice output.
  */
 void connectLED(void);
+
+/*
+    SysTick interrupt handler.
+ */
+void SysTick_Handler(void);
 
 /*
     Delay for a given number of milliseconds.
