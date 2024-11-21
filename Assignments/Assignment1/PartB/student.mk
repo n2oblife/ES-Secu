@@ -2,13 +2,13 @@
 # Change this file to match your requirements
 
 # Name of your project
-LD_NAME = TEST
+LD_NAME = PartB
 
 # Add lists of space separated source files
 # Own sources, e.g. main.c
-SRCS = tests.c
+SRCS = main.c
 # Library sources, e.g. xmc_gpio.c
-LIBSRCS = 
+LIBSRCS = xmc_gpio.c xmc4_gpio.c 
 # Precompiled libraries, e.g. -lm for math functions
 LIBLNK =
 
@@ -23,4 +23,3 @@ SCFLAGS  = -std=gnu99
 SCFLAGS += -O0
 # If you like, you can enable even more warnings, e.g. -Wextra, but for grading -Wall will be used
 SCFLAGS += -Wall
-

@@ -58,5 +58,7 @@ lib/
 *.sublime-project
 .DS_Store
 
+.zip
+
 # Exclude gitignore from itself
 !.gitignore

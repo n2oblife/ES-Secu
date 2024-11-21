@@ -214,11 +214,12 @@
 
 int main(void) {
     initCCU4();    // Initialize timer and LED
-    connectLED();  // Connect and set up LED1
+    // connectLED();  // Connect and set up LED1
 
     while (1) {
         send_morse_code("I CAN MORSE"); // Continuously send message in Morse code
-        delay_ms(END_OF_MESSAGE);       // 5-second delay between transmissions
+        for (int i = 0; i < END_OF_MESSAGE* 1000; i++) {}
+        // delay_ms(END_OF_MESSAGE);       // 5-second delay between transmissions
     }
 
     return 0;

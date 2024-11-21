@@ -1,14 +1,19 @@
 #pragma once
 
+#include <xmc_common.h>
+#include <xmc_gpio.h>
+
 //*****************************************************************************
 // Morse code constants
 //*****************************************************************************
 
-#define DOT_DURATION 100                // 100 ms for dot (should change for debug)
+#define DOT_DURATION 1000                // 100 ms for dot (should change for debug)
 #define END_OF_MESSAGE (5000)           // 5 seconds for end of message between transmissions
 #define DASH_DURATION (DOT_DURATION * 3)
 #define LETTER_SPACE (DOT_DURATION * 3)
 #define WORD_SPACE (DOT_DURATION * 7)
+
+const uint8_t ALT3 = 0b10011;
 
 // Morse code map for the required characters
 const char *morse_map[26] = {
@@ -23,6 +28,16 @@ const char *morse_map[26] = {
 
 // State variable for transmission handling
 volatile uint8_t is_transmitting = 0;
+
+/*
+    Switch on the LED1.
+*/
+void LED1_On(void);
+
+/*
+    Switch off the LED1.
+*/
+void LED1_Off(void);
 
 /*
     Send a message in Morse code by parsing it 

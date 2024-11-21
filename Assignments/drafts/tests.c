@@ -19,8 +19,8 @@ const float pwm_rate = 0.1;
 int main(void) {
   
   initCCU4();
-  connectLED();
-  LED_Off();
+  // connectLED();
+  LED_On();
 
   while(1);
   return 0;
@@ -35,11 +35,13 @@ void initCCU4() {
   // (step 4)
   CCU40->GIDLC = CCU4_GIDLC_SPRB_Msk;
   // (step 6)
-  CCU40_CC42->PRS = 0xffff;
-  CCU40_CC42->PSC = 0b1010;
-  CCU40_CC42->CRS = 0xffff*(1-0.1);
+  CCU40_CC42->PRS = 0xffff; // Set period for dimming
+  CCU40_CC42->PSC = 0b1010; // Set prescaler for dimming
+  // CCU40_CC42->CRS = 0xffff * (1-0.5); // Set duty cycle for dimming (100%)
+  CCU40_CC42->CRS = 0x0000; // Set duty cycle for dimming (0%)
+  // connectLED();
   // (step 7)
-  // CCU40->GCSS = CCU4_GCSS_S2SE_Msk;
+  CCU40->GCSS = CCU4_GCSS_S2SE_Msk;
   // (step 8)
   CCU40->GIDLC = CCU4_GIDLC_CS2I_Msk;
   // (step 9)
@@ -49,14 +51,21 @@ void initCCU4() {
 void connectLED() {
   const static uint8_t ALT3 = 0b10011;
   PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk) | (ALT3 << PORT1_IOCR0_PC1_Pos);
+  // PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk);
 }
 
 // Turn LED On by setting the output high on PORT1.1
 void LED_On() {
-    PORT1->OMR = (1 << 1);  // Set bit 1 to turn LED on (assuming P1.1 controls LED)
+  // CCU40_CC42->CRS = 0x0000; // Set duty cycle for dimming (100%)
+  const static uint8_t ALT3 = 0b10011;
+  PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk)| (ALT3 << PORT1_IOCR0_PC1_Pos);
+  // CCU40_CC42->CRS = 0xffff; // Set duty cycle for dimming (100%)
 }
 
 // Turn LED Off by clearing the output on PORT1.1
 void LED_Off() {
-    PORT1->OMR = (1 << (1 + 16));  // Clear bit 1 to turn LED off (using PCL for pin 1)
+  // CCU40_CC42->CRS = 0x0000; // Set duty cycle for dimming (100%)
+  const static uint8_t ALT3 = 0b10011;
+  PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk);
+  // CCU40_CC42->CRS = 0x0000; // Set duty cycle for dimming (0%)
 }

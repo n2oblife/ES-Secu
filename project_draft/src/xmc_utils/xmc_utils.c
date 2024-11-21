@@ -9,9 +9,9 @@ void initCCU4() {
     // Disable the CCU40 slice protection (step 4)
     CCU40->GIDLC = CCU4_GIDLC_SPRB_Msk;
     // Set the period and prescaler for the timer slice (step 6)
-    CCU40_CC42->PRS = 0xffff;
-    CCU40_CC42->PSC = 0b1010;
-    CCU40_CC42->CRS = 0xffff * (1 - 0.1); // Set duty cycle for dimming (50%)
+    CCU40_CC42->PRS = 0xffff;               // Set period for dimming
+    CCU40_CC42->PSC = 0b1010;               // Set prescaler for dimming
+    CCU40_CC42->CRS = 0xffff * pwm_rate;   // Set duty cycle for dimming (...%)
     // Enable CCU40 slice (step 7)
     CCU40->GCSS = CCU4_GCSS_S2SE_Msk;
     // Clear slice input selection (step 8)
@@ -20,10 +20,20 @@ void initCCU4() {
     CCU40_CC42->TCSET = CCU4_CC4_TCSET_TRBS_Msk;
 }
 
-void connectLED() {
-    const static uint8_t ALT3 = 0b10011;
-    // Set P1.1 as output and connect to CCU40 channel
-    PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk) | (ALT3 << PORT1_IOCR0_PC1_Pos);
+// void connectLED() {
+//     const static uint8_t ALT3 = 0b10011;
+//     // Set P1.1 as output and connect to CCU40 channel
+//     PORT1->IOCR0 = (PORT1->IOCR0 & ~PORT0_IOCR0_PC1_Msk) | (ALT3 << PORT1_IOCR0_PC1_Pos);
+// }
+
+void initSysTick() {
+    SYST_CSR->ENABLE = PPB_SYST_CSR_ENABLE_Msk;
+    // Set the reload value for 100 ms resolution
+    SysTick->LOAD = (SystemCoreClock / 1000) * TIMER_RESOLUTION;
+    // Set the priority of the SysTick interrupt
+    NVIC_SetPriority(SysTick_IRQn, 0);
+    // Enable the SysTick interrupt
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk;
 }
 
 void SysTick_Handler(void) {
@@ -33,8 +43,8 @@ void SysTick_Handler(void) {
 }
 
 void delay_ms(uint32_t ms) {
-    for (volatile uint32_t i = 0; i < ms * 1000; i++)
-        __NOP();  // TODO No Operation; Replace with timer-based delay if available
+    for (volatile uint32_t i = 0; i < ms * 1000; i++){}
+        // __NOP();  // TODO No Operation; Replace with timer-based delay if available
 }
 
 uint32_t get_time_ms() {

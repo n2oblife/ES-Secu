@@ -10,6 +10,8 @@
 #define TIMER_RESOLUTION 100 // 100 ms resolution (10 Hz)
 volatile size_t ticks = 0;
 
+const float pwm_rate = 0; // duty cycle -> 0% when not dimming 
+
 /*
     Initialize the CCU4 of XMC4500 uC based on Ref manual.
  */
