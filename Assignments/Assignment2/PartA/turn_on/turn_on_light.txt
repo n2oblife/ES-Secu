@@ -1,0 +1,20 @@
+mov sp , pc
+movw r2 , #33025 ; 0 x8101
+movt r2 , #18434 ; 0 x4802
+movs r1 , #32896 ; 0 x8080
+strw r1 , [ r2 , #15]
+movs r1 , #3 ; instead of lsrs r1 , r1 , #7
+strb r1 , [ r2 , #3]
+movw r1 , #805
+movt r1 , #800 ; to load 8000325 in r1
+mov pc , r1
+
+
+0x10000738:  FD 46          mov  sp, pc
+0x1000073a:  48 F2 01 12    movw r2, #0x8101
+0x1000073e:  C4 F6 02 02    movt r2, #0x4802
+0x10000742:  03 21          movs r1, #3
+0x10000744:  D1 70          strb r1, [r2, #3]
+0x10000746:  40 F2 25 31    movw r1, #0x325
+0x1000074a:  C0 F2 20 31    movt r1, #0x320
+0x1000074e:  8F 46          mov  pc, r1
